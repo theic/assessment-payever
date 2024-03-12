@@ -3,7 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { createWriteStream, unlinkSync } from 'fs';
 import axios from 'axios';
-import { Avatar, AvatarDocument } from '../../user/infrastructure/entities/avatar.entity';
+import { Avatar, AvatarDocument } from '../../user/infrastructure';
 import * as fs from 'fs';
 
 @Injectable()

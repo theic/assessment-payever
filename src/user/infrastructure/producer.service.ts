@@ -1,6 +1,6 @@
 import { Injectable, Inject } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
-import { Constants } from './constants';
+import { Constants } from '../../constants';
 
 @Injectable()
 export class ProducerService {

@@ -1,10 +1,19 @@
-import { Controller, Post, Get, Delete, Param, Body, Res, HttpStatus, UploadedFile, UseInterceptors, ParseFilePipe, MaxFileSizeValidator, FileTypeValidator } from '@nestjs/common';
-import { Response } from 'express';
-import { UserService } from '../infrastructure/user.service';
-import { CreateUserDto } from './dto/create-user.dto';
-import axios from 'axios';
-import { FileService } from '../../file/infrastructure/file.service';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  HttpStatus,
+  Param,
+  Post,
+  Res,
+} from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import axios from 'axios';
+import { Response } from 'express';
+import { FileService } from '../../file/infrastructure';
+import { UserService } from '../infrastructure';
+import { CreateUserDto } from './dto/create-user.dto';
 
 export interface UserOutputDto {
   readonly name: string;

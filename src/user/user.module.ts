@@ -1,14 +1,17 @@
 import { Module } from '@nestjs/common';
-import { MongooseModule } from '@nestjs/mongoose';
-import { User, UserSchema } from './infrastructure/entities/user.entity';
-import { UserService } from './infrastructure/user.service';
-import { UserController } from './api/user.controller';
-import { FileModule } from 'src/file/file.module';
-import { ProducerService } from 'src/producer.service';
-import { ClientProvider, ClientsModule, Transport } from '@nestjs/microservices';
-import { EmailService } from './email.service';
-import { Constants } from 'src/constants';
 import { ConfigService } from '@nestjs/config';
+import { ClientProvider, ClientsModule, Transport } from '@nestjs/microservices';
+import { MongooseModule } from '@nestjs/mongoose';
+import { Constants } from 'src/constants';
+import { FileModule } from 'src/file/file.module';
+import { UserController } from './api/user.controller';
+import {
+  EmailService,
+  ProducerService,
+  User,
+  UserSchema,
+  UserService,
+} from './infrastructure';
 
 @Module({
   imports: [
