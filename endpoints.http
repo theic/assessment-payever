@@ -1,4 +1,6 @@
-@baseUrl = http://localhost:3000
+@baseUrl = http://127.0.0.1:3000
+@fileName = avater-test.jpeg
+@userId = 1
 
 ### POST /api/users
 
@@ -12,12 +14,15 @@ Content-Type: application/json
 
 ### GET /api/user/{userId}
 
-GET /api/user/{userId} HTTP/1.1
+GET {{baseUrl}}/api/user/{{userId}} HTTP/1.1
+Content-Type: application/json
 
 ### GET /api/user/{userId}/avatar
 
-GET /api/user/{userId}/avatar HTTP/1.1
+GET {{baseUrl}}/api/user/{{userId}}/avatar HTTP/1.1
+Content-Type: application/json
 
 ### DELETE /api/user/{userId}/avatar
 
-DELETE /api/user/{userId}/avatar HTTP/1.1
+DELETE {{baseUrl}}/api/user/{{userId}}/avatar HTTP/1.1
+Content-Type: application/json
