@@ -7,10 +7,9 @@ export class ProducerService {
   constructor(@Inject(Constants.RABBITMQ_SERVICE_NAME) private client: ClientProxy) {}
 
   async sendMessage(topic: string, message: string) {
-    console.log('Sending message to', topic);
     try {
       await this.client.connect();
-      // this.client.emit(topic, message);
+      this.client.emit(topic, message);
     } catch (err) {
       console.log('Error sending message', err);
     }

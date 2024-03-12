@@ -1,38 +1,65 @@
-import { Controller, Post, Get, Delete, Param, Body, Res, HttpStatus } from '@nestjs/common';
+import { Controller, Post, Get, Delete, Param, Body, Res, HttpStatus, UploadedFile, UseInterceptors, ParseFilePipe, MaxFileSizeValidator, FileTypeValidator } from '@nestjs/common';
 import { Response } from 'express';
 import { UserService } from '../infrastructure/user.service';
 import { CreateUserDto } from './dto/create-user.dto';
-import { User } from '../infrastructure/entities/user.entity';
 import axios from 'axios';
-import { FileService } from '../../file/file.service';
-import { ProducerService } from 'src/producer.service';
+import { FileService } from '../../file/infrastructure/file.service';
+import { ConfigService } from '@nestjs/config';
+
+export interface UserOutputDto {
+  readonly name: string;
+  readonly email: string;
+}
+
+export interface ExternalUserOutputDto {
+  data: {
+    id: number;
+    email: string;
+    first_name: string;
+    last_name: string;
+    avatar: string;
+  };
+  support: {
+    url: string;
+    text: string;
+  };
+}
 
 @Controller('api')
 export class UserController {
   constructor(
     private readonly userService: UserService,
     private readonly fileService: FileService,
+    private readonly configService: ConfigService,
   ) {}
 
   @Post('/users')
-  async createUser(@Body() createUserDto: CreateUserDto): Promise<User> {
+  async createUser(@Body() createUserDto: CreateUserDto): Promise<UserOutputDto> {
     const user = await this.userService.create(createUserDto);
-    return user;
+    return {
+      email: user.email,
+      name: user.name,
+    };
   }
 
   @Get('/user/:userId')
-  async getUser(@Param('userId') userId: string): Promise<any> {
-    const response = await axios.get(`https://reqres.in/api/users/${userId}`);
+  async getExternalUser(@Param('userId') userId: string): Promise<any> {
+    const externalUrl = this.configService.get('REQRES_BASE_URL');
+    const response = await axios.get(`${externalUrl}/users/${userId}`);
     return response.data;
   }
 
   @Get('/user/:userId/avatar')
-  async getUserAvatar(@Param('userId') userId: string, @Res() res: Response): Promise<void> {
+  async getUserAvatar(
+    @Param('userId') userId: string,
+    @Res() res: Response,
+  ): Promise<void> {
     const avatar = await this.fileService.getAvatar(userId);
     if (avatar) {
       res.status(HttpStatus.OK).send(avatar.base64);
     } else {
-      const response = await axios.get(`https://reqres.in/api/users/${userId}`);
+      const externalUrl = this.configService.get('REQRES_BASE_URL');
+      const response = await axios.get(`${externalUrl}/users/${userId}`);
       const avatarUrl = response.data.data.avatar;
       const base64Avatar = await this.fileService.saveAvatar(userId, avatarUrl);
       res.status(HttpStatus.OK).send(base64Avatar);

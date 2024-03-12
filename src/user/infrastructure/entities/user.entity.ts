@@ -9,9 +9,6 @@ export class User {
   name: string;
 
   @Prop()
-  job: string;
-
-  @Prop()
   avatar: string;
 
   @Prop()
